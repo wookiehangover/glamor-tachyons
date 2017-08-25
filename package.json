@@ -4,17 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "node generate.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "glamor": "^2.20.40",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
     "mz": "^2.6.0",
-    "native-css": "^1.2.5",
-    "reverse-tachyons": "^1.1.8",
-    "tachyons": "^4.8.1"
+    "postcss": "^6.0.9",
+    "postcss-discard-comments": "^2.0.4",
+    "tachyons": "^4.8.1",
+    "uglify-js": "^3.0.28"
   }
 }
