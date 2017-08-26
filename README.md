@@ -110,7 +110,7 @@ import { insertRule } from 'glamor'
 reset({ insertRule })
 ```
 
-So to tie that all together, glamor and glamor-tachyons lets a component seemlessly and declaratively manage CSS composed by Tachyons classes. The following example, when server rendered will include an inline `<style>` tag featuring _only_ the styles for the tachyons classes referenced and the global reset.
+Together, `glamor` and `glamor-tachyons` let a component seemlessly and declaratively manage CSS composed by Tachyons classes. The following example, when server rendered, will include an inline `<style>` tag comprising the styles for _only_ the Tachyons classes referenced in the component and the global reset.
 
 ```jsx
 import { wrap, reset } from 'glamor-tachyons'
