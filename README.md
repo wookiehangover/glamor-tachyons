@@ -59,7 +59,22 @@ In it's simplest form, `glamor-tachyons` changes Tachyons classes into JavaScrip
 import { tachyons } from 'glamor-tachyons'
 
 tachyons('mt2 pink')
-// => { marginTop: '1rem', color: '#ff80cc' }
+// => { fontSize: '5rem', color: '#ff80cc' }
+```
+
+`glamor-tachyons` can also convert entire objects containing Tachyons class strings with the `wrap` method.
+
+```js
+import { tachyons, wrap } from 'glamor-tachyons'
+
+wrap({
+  h1: 'f-headline red',
+  h2: 'fw6 underline'
+})
+// => {
+//   h1: { fontSize: '5rem', color: '#ff80cc' },
+//   h2: { fontWeight: 600, textDecoration: 'underline' }
+// }
 ```
 
 Although [glamor]() is in the name, it's not required by glamor-tachyons. They're meant to go together, but there's nothing specific to glamor apart from producing output that it (and other CSS-in-JS libraries) can use.
@@ -84,20 +99,6 @@ export default () =>
     <h1 className={t('f-headline red')}>
     <h1 className={t('fw6 underline')}>
   </div>
-```
-
-`glamor-tachyons` can also change entirs objects containing Tachyons class strings with the `wrap` method.
-
-```js
-import { tachyons, wrap } from 'glamor-tachyons'
-import { css } from 'glamor-tachyons'
-
-wrap({
-  header: 'mt2'
-}, css)
-// => {
-//   header: css({ marginTop: '1rem' })
-// }
 ```
 
 Tachyons also has global styles that it needs in order to do it's thing. We didn't forget about those. The `reset()` method will pass each line of the Tachyons reset and global styles to a callback that works with [glamor.insertRule]().
@@ -132,6 +133,11 @@ export default () => {
 
 ## API
 
+### `tachyons(className): object`
+
+### `wrap(styles, [callback]): object`
+
+### `reset(glamor): void`
 
 ## Notes / Open Questions
 
