@@ -1,6 +1,6 @@
 import React from 'react'
 import { insertRule, css, style, rehydrate } from 'glamor'
-import { tachyons, reset } from 'glamor-tachyons'
+import { tachyons, reset, wrap } from 'glamor-tachyons'
 
 // Adds server generated styles to glamor cache.
 // Has to run before any `style()` calls
@@ -13,14 +13,6 @@ reset({ insertRule })
 
 const t = (classNames) => css(tachyons(classNames))
 
-// const t = (classNames) => {
-//   classNames.split(' ').forEach(selector => {
-//     const rule = tachyons(selector)
-//     css.global(`.${selector}`, rule)
-//   })
-//   return classNames
-// }
-
 const styles = {
   header: style({
     background: 'url(http://mrmrs.github.io/photos/display.jpg) no-repeat center right',
@@ -28,14 +20,23 @@ const styles = {
   })
 }
 
+const classNames = wrap({
+  article: `helvetica pb5`,
+  header: {
+    wrapper: `dtc v-mid cover ph3 ph4-m ph5-l`,
+    h1: `f2 f-subheadline-l measure lh-title fw9`,
+    h2: `f6 fw6 black bb b--pink dib`
+  }
+}, css)
+
 export default () => (
-<article className={t(`helvetica pb5`)}>
+<article className={classNames.article}>
   <header className={t(`vh-100 bg-light-pink dt w-100`)}>
     <div 
       {...styles.header}
-      className={t(`dtc v-mid cover ph3 ph4-m ph5-l`)}>
-      <h1 className={t(`f2 f-subheadline-l measure lh-title fw9`)}>A Night Taking Photos at San Francisco’s Spooky Ruins of the Sutro Baths</h1>
-      <h2 className={t(`f6 fw6 black`)}>A story by Nancy Drew</h2>
+      className={classNames.header.wrapper}>
+      <h1 className={classNames.header.h1}>A Night Taking Photos at San Francisco’s Spooky Ruins of the Sutro Baths</h1>
+      <h2 className={classNames.header.h2}>A story by Nancy Drew</h2>
     </div>
   </header>
   <div className={t(`serif ph3 ph4-m ph5-l`)}>
