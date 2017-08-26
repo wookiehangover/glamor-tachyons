@@ -68,11 +68,13 @@ const parseCSS = function (contents) {
 
 const data = parseCSS(tachyonsCss)
 
-const toExport = (rule, selector) =>
-    `exports['${selector}'] = ${JSON.stringify(rule)};`
+const toRow = (rule, selector) =>
+    `'${selector}': ${JSON.stringify(rule)},`
 
 fs.writeFileSync('tachyons-reset.js', `module.exports = ${JSON.stringify(data.reset, null, 2)}`)
 fs.writeFileSync('tachyons.js', `'use strict'
-${map(data.tachyons, toExport).join('\n')}
-${map(data.atRules, toExport).join('\n')}
+module.exports = {
+${map(data.tachyons, toRow).join('\n')}
+${map(data.atRules, toRow).join('\n')}
+}
 `)
