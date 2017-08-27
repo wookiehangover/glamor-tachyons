@@ -1,6 +1,6 @@
 {
   "name": "glamor-tachyons",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha",
   "description": "A tool for using Tacyhons with glamor or other css-in-js libraries",
   "main": "index.js",
   "scripts": {
