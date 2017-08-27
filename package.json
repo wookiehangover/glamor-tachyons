@@ -1,23 +1,41 @@
 {
   "name": "glamor-tachyons",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.0-alpha",
+  "description": "A tool for using Tacyhons with glamor or other css-in-js libraries",
   "main": "index.js",
   "scripts": {
     "build": "node generate.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "standard lib/*.js",
+    "test": "lab -c"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "css",
+    "glamor",
+    "glamorous",
+    "tachyons"
+  ],
+  "author": "Sam Breed (@wookiehangover)",
   "license": "ISC",
   "dependencies": {
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "mz": "^2.6.0",
+    "code": "^4.1.0",
+    "lab": "^14.2.1",
     "postcss": "^6.0.9",
-    "postcss-discard-comments": "^2.0.4",
-    "tachyons": "^4.8.1",
-    "uglify-js": "^3.0.28"
-  }
+    "standard": "^10.0.3",
+    "tachyons": "^4.8.1"
+  },
+  "directories": {
+    "example": "example",
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wookiehangover/glamor-tachyons.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wookiehangover/glamor-tachyons/issues"
+  },
+  "homepage": "https://github.com/wookiehangover/glamor-tachyons#readme"
 }
