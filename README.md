@@ -5,7 +5,7 @@
 ## Background
 
 <details>
-In 2016 and 2017, this is how we've been using Tachyons at Credit Karma:
+In 2016 and 2017, we've been using Tachyons for a good portion of our CSS at Credit Karma. With a large number of people across different teams all working on different pieces of the product in parallel, we've found some useful patterns for improving the developer experience of using Tachyons. Here's what an average component might look like:
 
 ```js
 const styles = {
@@ -21,20 +21,24 @@ export default () => {
 }
 ```
 
-We found that this helps with readability and consolidates some of the business logic that tends to work its way into the `className` prop of stateful components.
+We started using this "page object" pattern to not repeat identical Tachyons `className` strings. The pattern helps with readability, especially when navigating another team's project. It can consolidate some of the business logic that stateful components often have around `className`. It's less cognative load than our previous approach (webpack + sass + extract text plugin) and doesn't require an extra build step.
 
-In general, it helps with reuse and cuts down on duplication of idential Tachyons `className` strings, but in several ways it's less than ideal:
+It's less cognative load than our previous approach (webpack + sass + extract text plugin) and doesn't require an extra build step. Plus, it makes overridding styling for a shared component much easier to add.
 
-1. Lacks strong enforcement. There's no garauntee that every tachyons class will make it into your `styles` object.
-2. Relies on an external systems. We load Tachyons through a Sass build pipeline in Webpack, so shared modules tend to depend on Tachyons implicitly to avoid duplicating it in downstream builds. Sad!
-3. Reusable components require lots of extra work. If you want to reuse a component but alter some it's tacyhons classes
-4. Anything goes when Tachyons can't support what you're trying to do. Inline styles, individual Sass files, and other imported sass/css modules are all used as work arounds across our projects.
+But in several ways this pattern is less than ideal:
+
+1. **Lacks strong enforcement.** There's no garauntee that every tachyons class will make it into your `styles` object.
+2. **Relies on an external systems.** We load Tachyons through a Sass build pipeline in Webpack, so shared modules tend to depend on Tachyons implicitly to avoid duplicating it in downstream builds. Sad!
+3. **Reusable components require extra work.** If you want to reuse a component but alter some it's tacyhons classes, you need to expose extra props and provide a good way of merging them. No matter how you do it, there's more work to add a consistent, well-documented api.
+4. **Anything goes when Tachyons can't support what you're trying to do.** Inline styles, individual Sass files, and other imported sass/css modules are all used as work arounds across our projects.
 
 On top of that, there are a few recent trends in CSS / browser performance that are hard to do in our current setup.
 
 * Removing unused styles from the payload
 * Inlining styles in the `<head>` to avoid blocking the render while CSS downloads
 * CSS-in-JS techniques are gaining traction and libraries are becoming battle-hardened
+
+Not to mention that our page object pattern is already CSS-in-JS! The natural conclusion was to survey the CSS-in-JS landscape and attempt to augment our in-house solution with some updated tooling under the hood.
 </details>
 
 ## Installation
@@ -77,7 +81,7 @@ wrap({
 // }
 ```
 
-Although [glamor]() is in the name, it's not required by glamor-tachyons. They're meant to go together, but there's nothing specific to glamor apart from producing output that it (and other CSS-in-JS libraries) can use.
+Although [glamor](https://github.com/threepointone/glamor) is in the name, it's not required by glamor-tachyons. They're meant to go together, but there's nothing specific to glamor apart from producing output that it (and other CSS-in-JS libraries) can use.
 
 To use with glamor, simply pass the output of `tachyons()` to one of glamor's APIs. It's easy, give it a shot!
 
@@ -101,7 +105,7 @@ export default () =>
   </div>
 ```
 
-Tachyons also has global styles that it needs in order to do it's thing. We didn't forget about those. The `reset()` method will pass each line of the Tachyons reset and global styles to a callback that works with [glamor.insertRule]().
+Tachyons also has global styles that it needs in order to do it's thing. We didn't forget about those. The `reset()` method will pass each line of the Tachyons reset and global styles to a callback that works with [glamor.insertRule](https://github.com/threepointone/glamor/blob/6634946ed433bca8098a507022250717f8029029/src/reset.js#L1), similarly to glamor's own reset.
 
 ```js
 import { reset } from 'glamor-tachyons'
@@ -147,14 +151,11 @@ export default () => {
     * maybe use a webpack plugin at build time to change the class strings directly into js and strip the dependency?
     * maybe use a webpack loader to pre-process and inline an object of Tachyons classes by file name?
     * or that webpack plugin that lets your inlne output that exec'ed at build time could work. Shit just use that if you don't want the extra 20kb.
-* Does this support inline styles?
-  * Possibly, but it's not extensively tested. Use glamor for that.
-* What about the tachyons reset and global styles?
-  * included, but a separate API
 
 
 Research / Prior work:
 ```
+https://github.com/quora/parsecss
 https://github.com/hugozap/reverse-tachyons
 https://github.com/raphamorim/native-css
 https://github.com/Khan/aphrodite
