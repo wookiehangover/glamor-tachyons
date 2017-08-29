@@ -1,11 +1,11 @@
 # glamor-tachyons
 
-> A tool for using Tachyons with Glamor or other CSS-in-JS libraries
+> A tool for using [Tachyons][tachyons] with [Glamor][glamor] or other CSS-in-JS libraries
 
 ## Background
 
 <details>
-In 2016 and 2017, we've been using Tachyons for a good portion of our CSS at Credit Karma. With a large number of people across different teams all working on different pieces of the product in parallel, we've found some useful patterns for improving the developer experience of using Tachyons. Here's what an average component might look like:
+In 2016 and 2017, we've been using Tachyons for a good portion of our CSS at Credit Karma. With a large number of front end developers, spread across different teams, all working on different pieces of the product in parallel, we've found some useful patterns for improving the developer experience of using Tachyons. Here's what an average component might look like:
 
 ```js
 const styles = {
@@ -21,7 +21,7 @@ export default () => {
 }
 ```
 
-We started using this "page object" pattern to not repeat identical Tachyons `className` strings. The pattern helps with readability, especially when navigating another team's project. It can consolidate some of the business logic that stateful components often have around `className`. It's less cognitive load than our previous approach (webpack + sass + extract text plugin) and doesn't require an extra build step.
+We started using this "page object" pattern to not repeat identical Tachyons `className` strings. The pattern helps with readability, especially when navigating another team's projects.
 
 It's less cognitive load than our previous approach (webpack + sass + extract text plugin) and doesn't require an extra build step. Plus, it makes overriding styling for a shared component much easier to add.
 
@@ -83,7 +83,7 @@ wrap({
 
 Although [glamor](https://github.com/threepointone/glamor) is in the name, it's not required by glamor-tachyons. They're meant to go together, but there's nothing specific to glamor apart from producing output that it (and other CSS-in-JS libraries) can use.
 
-To use with glamor, simply pass the output of `tachyons()` to one of Glamor's APIs. It's easy, give it a shot!
+To use with Glamor, simply pass the output of `tachyons()` to one of Glamor's APIs. It's easy, give it a shot!
 
 ```js
 import { tachyons } from 'glamor-tachyons'
@@ -93,9 +93,9 @@ export default () =>
   <h1 className={css(tachyons('f-headline red'))}>
 ```
 
-For convenience, the [`wrap`](#wrapstyles-callback-object) method accepts a second argument that makes converting a page-object of Tachyons classes to Glamor one step! It's the same result as calling `css(tachyons(classList))` for every value in the object.
+For convenience, the [`wrap`](#wrapstyles-callback-object) method accepts a second argument that makes converting a page-object of Tachyons classes to Glamor one step! It's the same result as calling `css(tachyons(classNames))` for every value in the object.
 
-```js
+```js 
 import { wrap } from 'glamor-tachyons'
 import { css } from 'glamor'
 
@@ -108,20 +108,6 @@ wrap({
 //   h2: css({ fontWeight: 600, textDecoration: 'underline' })
 // }
 ```
-
-And if you're repeating that pattern all over the place, you can wrap those calls in another function to keep things tidy:
-
-```js
-const t = (classNames) => css(tachyons(classNames))
-
-export default () => 
-  <div>
-    <h1 className={t('f-headline red')}>
-    <h1 className={t('fw6 underline')}>
-  </div>
-```
-
-
 
 Tachyons also has global styles that it needs in order to do it's thing. We didn't forget about those. The `reset()` method will pass each line of the Tachyons reset and global styles to a callback that works with [glamor.insertRule](https://github.com/threepointone/glamor/blob/6634946ed433bca8098a507022250717f8029029/src/reset.js#L1), similarly to Glamor's own reset.
 
@@ -157,9 +143,53 @@ export default () => {
 
 ### `tachyons(className): object`
 
+Convert [Tachyons class names][classes] to an object of CSS properties. `className` can be a space-delimited string or array.
+
+```js
+tachyons('mt2 pink')
+// => { fontSize: '5rem', color: '#ff80cc' }
+```
+
 ### `wrap(styles, [callback]): object`
 
+Reduce an object containing [Tachyons class names][classes] to a nested object containing CSS properties. Allows multiple levels of nesting.
+
+```js
+wrap({
+  header: {
+    h1: 'pink'
+  },
+  body: 'black'
+})
+// => {
+//   header: {
+//     h1: { color: '#ff80cc' }
+//   },
+//   body: { color: '#000' }
+// }
+```
+
+Accepts an optional callback as a second argument, to be called for every key in the object. Offers an easy integration for `glamor.css`
+
+```js
+wrap({
+  h1: 'pink'
+}, glamor.css)
+// => {
+//   h1: glamor.css({ color: '#ff80cc' })
+// }
+```
+
 ### `reset(glamor): void`
+
+Applies the Tachyons [reset and global styles](https://github.com/tachyons-css/tachyons/blob/master/src/tachyons.css#L28) by calling [`glamor.insertRule()`](https://github.com/threepointone/glamor/blob/master/src/reset.js) for each line of the reset. An object with a method named `insertRule` will work.
+
+```js
+import { insertRule } from 'glamor'
+
+reset({ insertRule })
+// Side effect: global reset is now applied
+```
 
 ## Notes / Open Questions
 
@@ -169,6 +199,7 @@ export default () => {
     * maybe use a webpack plugin at build time to change the class strings directly into js and strip the dependency?
     * maybe use a webpack loader to pre-process and inline an object of Tachyons classes by file name?
     * or that webpack plugin that lets your inline output that exec'ed at build time could work.
+- [ ] Support Tachyons custom builds
 
 Research / Prior work:
 ```
@@ -177,3 +208,7 @@ https://github.com/hugozap/reverse-tachyons
 https://github.com/raphamorim/native-css
 https://github.com/Khan/aphrodite
 ```
+
+[tachyons]: http://tachyons.io/
+[glamor]: https://github.com/threepointone/glamor
+[classes]: http://tachyons.io/docs/table-of-styles/
