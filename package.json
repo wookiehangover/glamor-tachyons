@@ -8,6 +8,9 @@
     "lint": "standard lib/*.js",
     "test": "lab -c"
   },
+  "bin": {
+    "glamor-tachyons": "bin/glamor-tachyons.js"
+  },
   "keywords": [
     "css",
     "glamor",

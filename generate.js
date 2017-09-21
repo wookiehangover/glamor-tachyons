@@ -1,8 +1,8 @@
 'use strict'
 
 const fs = require('fs')
+const path = require('path')
 const postcss = require('postcss')
-const tachyonsCss = fs.readFileSync('node_modules/tachyons/css/tachyons.css', 'utf8')
 const { camelCase, forEach, isEqual, map } = require('lodash')
 const helpers = require('./lib/helpers')
 
@@ -73,17 +73,20 @@ const parseCSS = function (contents) {
   }
 }
 
-const data = parseCSS(tachyonsCss)
-
-const toRow = (rule, selector) => `"${selector}": ${JSON.stringify(rule)},`
-
-const resetSrc = `module.exports = ${JSON.stringify(data.reset, null, 2)}`
-const tachyonsSrc = `'use strict'
+module.exports = function (tachyonsPath = require.resolve('tachyons/css/tachyons.css')) {
+    const tachyonsCss = fs.readFileSync(tachyonsPath, 'utf8')
+    const data = parseCSS(tachyonsCss)
+    const toRow = (rule, selector) => `"${selector}": ${JSON.stringify(rule)},`
+    const resetSrc = `module.exports = ${JSON.stringify(data.reset, null, 2)}`
+    const tachyonsSrc = `'use strict'
 module.exports = {
-  ${map(data.tachyons, toRow).join('\n  ')}
-  ${map(data.atRules, toRow).join('\n  ')}
+    ${map(data.tachyons, toRow).join('\n  ')}
+    ${map(data.atRules, toRow).join('\n  ')}
 }
-`
+    `
+    
+    fs.writeFileSync(path.join(__dirname, 'tachyons', 'reset.js'), resetSrc)
+    fs.writeFileSync(path.join(__dirname, 'tachyons', 'index.js'), tachyonsSrc)
 
-fs.writeFileSync('./tachyons/reset.js', resetSrc)
-fs.writeFileSync('./tachyons/index.js', tachyonsSrc)
+    console.log('glamor-tachyons/tachyons updated!')
+}
