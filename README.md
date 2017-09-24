@@ -5,7 +5,7 @@
 ## Background
 
 <details>
-In 2016 and 2017, we've been using Tachyons for a good portion of our CSS at Credit Karma. With a large number of front end developers, spread across different teams, all working on different pieces of the product in parallel, we've found some useful patterns for improving the developer experience of using Tachyons. Here's what an average component might look like:
+In 2016 and 2017, we've been using Tachyons for a good portion of our CSS at Credit Karma. With a large number of front end developers spread across different teams all working on different pieces of the product in parallel, we've found some useful patterns for improving the developer experience with Tachyons. Here's what an average component might look like:
 
 ```js
 const styles = {
