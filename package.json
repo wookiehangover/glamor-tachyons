@@ -23,7 +23,7 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "code": "^4.1.0",
+    "code": "^5.1.0",
     "lab": "^14.2.1",
     "postcss": "^6.0.9",
     "standard": "^10.0.3",
