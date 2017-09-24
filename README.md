@@ -1,5 +1,7 @@
 # glamor-tachyons
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/wookiehangover/glamor-tachyons.svg)](https://greenkeeper.io/)
+
 > A tool for using [Tachyons][tachyons] with [Glamor][glamor] or other CSS-in-JS libraries
 
 ## Background
