@@ -3,7 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const postcss = require('postcss')
-const { camelCase, forEach, isEqual, map } = require('lodash')
+const { startCase, camelCase, forEach, isEqual, map } = require('lodash')
 const helpers = require('./lib/helpers')
 
 const parseCSS = function (contents) {
@@ -47,7 +47,12 @@ const parseCSS = function (contents) {
       let props = {}
 
       rule.walkDecls((decl) => {
-        props[camelCase(decl.prop)] = decl.value
+        // Browser Prefix Detection
+        if (decl.prop.indexOf('-o-') === 0 || decl.prop.indexOf('-webkit-') === 0 || decl.prop.indexOf('-moz-') === 0 || decl.prop.indexOf('-ms-') === 0) {
+          props[startCase(decl.prop).split(' ').join('')] = decl.value
+        } else {
+          props[camelCase(decl.prop)] = decl.value
+        }
       })
 
       // Prefix all @rules with the right params
